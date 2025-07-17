@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🎵 Aawaaz.AI - Advanced Text-to-Speech</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    animation: {
+                        'gradient': 'gradient 8s ease infinite',
+                        'float': 'float 6s ease-in-out infinite',
+                        'pulse-glow': 'pulse-glow 2s ease-in-out infinite alternate',
+                    },
+                    keyframes: {
+                        gradient: {
+                            '0%, 100%': {
+                                'background-size': '200% 200%',
+                                'background-position': 'left center'
+                            },
+                            '50%': {
+                                'background-size': '200% 200%',
+                                'background-position': 'right center'
+                            },
+                        },
+                        float: {
+                            '0%, 100%': { transform: 'translateY(0px)' },
+                            '50%': { transform: 'translateY(-20px)' },
+                        },
+                        'pulse-glow': {
+                            '0%': { 'box-shadow': '0 0 20px rgba(139, 92, 246, 0.5)' },
+                            '100%': { 'box-shadow': '0 0 40px rgba(139, 92, 246, 0.8), 0 0 60px rgba(139, 92, 246, 0.6)' },
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        .glass-morphism {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        .text-gradient {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .bg-animated {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
+            background-size: 400% 400%;
+            animation: gradient 8s ease infinite;
+        }
+        .tooltip {
+            position: relative;
+        }
+        .tooltip:hover .tooltip-text {
+            visibility: visible;
+            opacity: 1;
+        }
+        .tooltip-text {
+            visibility: hidden;
+            opacity: 0;
+            position: absolute;
+            z-index: 1000;
+            bottom: 125%;
+            left: 50%;
+            margin-left: -100px;
+            width: 200px;
+            background-color: rgba(0, 0, 0, 0.9);
+            color: white;
+            text-center;
+            border-radius: 8px;
+            padding: 8px;
+            font-size: 14px;
+            transition: opacity 0.3s;
+        }
+        .tooltip-text::after {
+            content: "";
+            position: absolute;
+            top: 100%;
+            left: 50%;
+            margin-left: -5px;
+            border-width: 5px;
+            border-style: solid;
+            border-color: rgba(0, 0, 0, 0.9) transparent transparent transparent;
+        }
+    </style>
+</head>
+<body class="min-h-screen bg-animated text-white overflow-x-hidden">
+    <div class="container mx-auto px-4 py-8 max-w-4xl">
+        <!-- User Navigation -->
+        <nav class="mb-8 flex justify-between items-center">
+            <div class="text-left">
+                <a href="/" class="text-2xl font-bold text-white hover:text-purple-300 transition-colors">
+                    <i class="fas fa-home mr-2"></i>Aawaaz.AI
+                </a>
+            </div>
+            <div class="flex items-center space-x-4">
+                {% if current_user.is_authenticated %}
+                    <div class="glass-morphism px-4 py-2 rounded-lg flex items-center space-x-3">
+                        <div class="text-right">
+                            <p class="text-white font-semibold">{{ current_user.first_name or current_user.username }}</p>
+                            <p class="text-white/60 text-sm">{{ current_user.email }}</p>
+                        </div>
+                        <div class="flex space-x-2">
+                            <a href="/profile" class="bg-purple-600/20 hover:bg-purple-600/40 p-2 rounded-lg transition-all duration-300 backdrop-blur-sm border border-purple-400/30" title="View Profile">
+                                <i class="fas fa-user"></i>
+                            </a>
+                            <a href="/logout" class="bg-red-600/20 hover:bg-red-600/40 p-2 rounded-lg transition-all duration-300 backdrop-blur-sm border border-red-400/30" title="Logout">
+                                <i class="fas fa-sign-out-alt"></i>
+                            </a>
+                        </div>
+                    </div>
+                {% else %}
+                    <div class="flex items-center space-x-3">
+                        <a href="/login" class="bg-blue-600/20 hover:bg-blue-600/40 px-4 py-2 rounded-lg transition-all duration-300 backdrop-blur-sm border border-blue-400/30">
+                            <i class="fas fa-sign-in-alt mr-2"></i>Sign In
+                        </a>
+                        <a href="/signup" class="bg-purple-600/20 hover:bg-purple-600/40 px-4 py-2 rounded-lg transition-all duration-300 backdrop-blur-sm border border-purple-400/30">
+                            <i class="fas fa-user-plus mr-2"></i>Sign Up
+                        </a>
+                    </div>
+                {% endif %}
+            </div>
+        </nav>
+
+        <!-- Header -->
+        <header class="text-center mb-12">
+            <div class="animate-float">
+                <h1 class="text-6xl md:text-7xl font-bold text-gradient mb-4 animate-pulse-glow">
+                    <i class="fas fa-microphone-alt mr-4"></i>
+                    Aawaaz.AI
+                    <i class="fas fa-volume-up ml-4"></i>
+                </h1>
+                <p class="text-xl md:text-2xl text-white/80 font-light">
+                    🎵 Advanced Text-to-Speech with 12 Diverse Voices 🌍
+                </p>
+                <div class="mt-4 flex justify-center space-x-4">
+                    <a href="/api-docs" class="inline-block bg-purple-600/20 hover:bg-purple-600/40 px-4 py-2 rounded-lg transition-all duration-300 backdrop-blur-sm border border-purple-400/30">
+                        <i class="fas fa-code mr-2"></i>API Docs
+                    </a>
+                    <a href="/stats" class="inline-block bg-green-600/20 hover:bg-green-600/40 px-4 py-2 rounded-lg transition-all duration-300 backdrop-blur-sm border border-green-400/30">
+                        <i class="fas fa-chart-line mr-2"></i>Analytics
+                    </a>
+                </div>
+            </div>
+        </header>
+
+        <!-- Main Content Card -->
+        <div class="glass-morphism rounded-3xl p-8 md:p-12 shadow-2xl relative overflow-hidden mb-8">
+            <!-- Animated background elements -->
+            <div class="absolute top-0 left-0 w-full h-full overflow-hidden pointer-events-none">
+                <div class="absolute top-10 left-10 w-20 h-20 bg-purple-500/20 rounded-full blur-xl animate-float"></div>
+                <div class="absolute bottom-10 right-10 w-32 h-32 bg-blue-500/20 rounded-full blur-xl animate-float" style="animation-delay: 2s;"></div>
+                <div class="absolute top-1/2 left-1/4 w-16 h-16 bg-pink-500/20 rounded-full blur-xl animate-float" style="animation-delay: 4s;"></div>
+            </div>
+
+            <form method="POST" class="relative z-10">
+                <!-- Text Input Section -->
+                <div class="mb-8">
+                    <label for="text" class="block text-lg font-semibold mb-4 text-white">
+                        <i class="fas fa-edit mr-2 text-purple-300"></i>
+                        Enter Your Text
+                    </label>
+                    <div class="relative">
+                        <textarea 
+                            id="text" 
+                            name="text" 
+                            rows="6" 
+                            class="w-full p-6 bg-white/10 backdrop-blur-md border border-white/20 rounded-2xl text-white placeholder-white/60 focus:outline-none focus:ring-2 focus:ring-purple-400 focus:border-transparent transition-all duration-300 resize-none"
+                            placeholder="Type your message here... Maximum 5000 characters ✨"
+                            required
+                            maxlength="5000">{{ request.form.get('text', '') }}</textarea>
+                        <div class="absolute bottom-4 right-4 text-sm">
+                            <span id="char-count" class="font-medium">0</span>
+                            <span class="text-white/60">/5000</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Voice Selection -->
+                <div class="mb-8">
+                    <label for="voice" class="block text-lg font-semibold mb-4 text-white">
+                        <i class="fas fa-user-friends mr-2 text-purple-300"></i>
+                        Choose Your Voice
+                    </label>
+                    <div class="tooltip">
+                        <select id="voice" name="voice" class="w-full p-4 bg-white/10 backdrop-blur-md border border-white/20 rounded-2xl text-white focus:outline-none focus:ring-2 focus:ring-purple-400 focus:border-transparent transition-all duration-300" required>
+                            <option value="" class="bg-gray-800">🎭 Select a voice style...</option>
+                            {% for voice_name, voice_data in voices.items() %}
+                            <option value="{{ voice_name }}" class="bg-gray-800" 
+                                {% if request.form.get('voice') == voice_name %}selected{% endif %}>
+                                {{ voice_data.flag }} {{ voice_name }}
+                            </option>
+                            {% endfor %}
+                        </select>
+                        <span class="tooltip-text">Choose from 12 diverse voices including Indian, American, British, German, Arabic, Japanese and more!</span>
+                    </div>
+                </div>
+
+                <!-- Generate Button -->
+                <div class="text-center mb-8">
+                    <div class="tooltip">
+                        <button type="submit" class="bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 px-12 py-4 rounded-full text-xl font-bold text-white shadow-lg hover:shadow-2xl transform hover:scale-105 transition-all duration-300 animate-pulse-glow">
+                            <i class="fas fa-play mr-3"></i>
+                            🎧 Generate Speech
+                            <i class="fas fa-magic ml-3"></i>
+                        </button>
+                        <span class="tooltip-text">Click to convert your text into natural-sounding speech using advanced AI technology!</span>
+                    </div>
+                </div>
+            </form>
+
+            <!-- Results Section -->
+            {% if audio_file %}
+            <div class="mt-8 p-6 bg-green-500/20 backdrop-blur-sm border border-green-400/30 rounded-2xl">
+                <div class="text-center mb-6">
+                    <div class="inline-flex items-center justify-center w-16 h-16 bg-green-500/30 rounded-full mb-4">
+                        <i class="fas fa-check-circle text-2xl text-green-300"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-green-300 mb-2">Your audio is ready! 🎉</h3>
+                    <p class="text-green-200/80">Click play to listen or download the MP3 file</p>
+                </div>
+                
+                <div class="bg-white/10 backdrop-blur-sm rounded-2xl p-6">
+                    <audio controls class="w-full mb-4 rounded-lg">
+                        <source src="{{ url_for('play_audio', filename=audio_file) }}" type="audio/mpeg">
+                        Your browser does not support the audio element.
+                    </audio>
+                    
+                    <div class="text-center">
+                        <a href="{{ url_for('download_audio', filename=audio_file) }}" 
+                           class="inline-block bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 px-8 py-3 rounded-full text-white font-semibold transition-all duration-300 transform hover:scale-105 shadow-lg">
+                            <i class="fas fa-download mr-2"></i>
+                            Download MP3
+                        </a>
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+
+            <!-- Error Message -->
+            {% if error_message %}
+            <div class="mt-8 p-6 bg-red-500/20 backdrop-blur-sm border border-red-400/30 rounded-2xl">
+                <div class="flex items-center">
+                    <div class="flex-shrink-0">
+                        <i class="fas fa-exclamation-triangle text-2xl text-red-300"></i>
+                    </div>
+                    <div class="ml-4">
+                        <h3 class="text-lg font-semibold text-red-300 mb-1">Oops! Something went wrong</h3>
+                        <p class="text-red-200">{{ error_message }}</p>
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+        </div>
+
+        <!-- Quick API Info -->
+        <div class="glass-morphism rounded-2xl p-6 shadow-xl">
+            <div class="text-center">
+                <h3 class="text-2xl font-bold text-white mb-4">
+                    <i class="fas fa-code mr-2 text-purple-300"></i>
+                    Developer API Available
+                </h3>
+                <p class="text-white/80 mb-4">
+                    Integrate Aawaaz.AI into your applications with our simple REST API
+                </p>
+                <div class="bg-black/30 rounded-lg p-4 mb-4">
+                    <code class="text-green-300 text-sm">
+                        GET {{ request.url_root }}api?text=Hello+World&voice=US+Male
+                    </code>
+                </div>
+                <a href="/api-docs" class="inline-block bg-gradient-to-r from-green-600 to-blue-600 hover:from-green-700 hover:to-blue-700 px-8 py-3 rounded-full text-white font-semibold transition-all duration-300 transform hover:scale-105">
+                    <i class="fas fa-book mr-2"></i>
+                    View Full Documentation
+                </a>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <footer class="text-center mt-12 py-8 border-t border-white/20">
+            <p class="text-white/60">
+                Powered by Aawaaz.AI | Made by Heart
+            </p>
+        </footer>
+    </div>
+
+    <script>
+        // Character counter with color coding
+        const textArea = document.getElementById('text');
+        const charCount = document.getElementById('char-count');
+        
+        function updateCharCount() {
+            const count = textArea.value.length;
+            charCount.textContent = count;
+            
+            // Color coding based on character count
+            if (count > 4500) {
+                charCount.className = 'font-medium text-red-400';
+            } else if (count > 3500) {
+                charCount.className = 'font-medium text-yellow-400';
+            } else {
+                charCount.className = 'font-medium text-green-400';
+            }
+        }
+        
+        textArea.addEventListener('input', updateCharCount);
+        updateCharCount(); // Initialize
+
+        // Form submission loading state
+        const form = document.querySelector('form');
+        const submitButton = form.querySelector('button[type="submit"]');
+        
+        form.addEventListener('submit', function() {
+            submitButton.innerHTML = '<i class="fas fa-spinner fa-spin mr-3"></i>Generating...';
+            submitButton.disabled = true;
+        });
+
+        // Add smooth scrolling to results
+        {% if audio_file or error_message %}
+        document.addEventListener('DOMContentLoaded', function() {
+            const resultsSection = document.querySelector('.mt-8.p-6');
+            if (resultsSection) {
+                resultsSection.scrollIntoView({ behavior: 'smooth' });
+            }
+        });
+        {% endif %}
+
+        // Voice selection preview
+        const voiceSelect = document.getElementById('voice');
+        voiceSelect.addEventListener('change', function() {
+            const selectedOption = this.options[this.selectedIndex];
+            if (selectedOption.value) {
+                // Add a subtle animation to indicate selection
+                this.style.transform = 'scale(1.02)';
+                setTimeout(() => {
+                    this.style.transform = 'scale(1)';
+                }, 200);
+            }
+        });
+    </script>
+</body>
+</html>

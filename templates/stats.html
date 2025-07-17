@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>📊 Aawaaz.AI Analytics Dashboard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        .glass-morphism {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        .bg-animated {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
+            background-size: 400% 400%;
+            animation: gradient 8s ease infinite;
+        }
+        @keyframes gradient {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+    </style>
+</head>
+<body class="min-h-screen bg-animated text-white">
+    <div class="container mx-auto px-4 py-8 max-w-7xl">
+        <!-- Header -->
+        <header class="text-center mb-12">
+            <h1 class="text-5xl md:text-6xl font-bold mb-4">
+                <i class="fas fa-chart-line mr-4 text-purple-300"></i>
+                <span class="bg-gradient-to-r from-purple-400 to-blue-400 bg-clip-text text-transparent">
+                    Analytics Dashboard
+                </span>
+            </h1>
+            <p class="text-xl md:text-2xl text-white/80 font-light mb-6">
+                📊 Aawaaz.AI Usage Statistics & Insights
+            </p>
+            <div class="flex justify-center space-x-4">
+                <a href="/" class="bg-purple-600/20 hover:bg-purple-600/40 px-6 py-3 rounded-lg transition-all duration-300 backdrop-blur-sm border border-purple-400/30">
+                    <i class="fas fa-home mr-2"></i>Back to App
+                </a>
+                <a href="/api-docs" class="bg-blue-600/20 hover:bg-blue-600/40 px-6 py-3 rounded-lg transition-all duration-300 backdrop-blur-sm border border-blue-400/30">
+                    <i class="fas fa-code mr-2"></i>API Docs
+                </a>
+                <a href="/analytics/logout" class="bg-red-600/20 hover:bg-red-600/40 px-6 py-3 rounded-lg transition-all duration-300 backdrop-blur-sm border border-red-400/30">
+                    <i class="fas fa-sign-out-alt mr-2"></i>Logout
+                </a>
+            </div>
+        </header>
+
+        {% if not database_available %}
+        <!-- No Database Message -->
+        <div class="glass-morphism rounded-2xl p-8 text-center">
+            <div class="mb-6">
+                <i class="fas fa-database text-6xl text-gray-400 mb-4"></i>
+                <h2 class="text-3xl font-bold text-gray-300 mb-4">Database Not Available</h2>
+                <p class="text-gray-400 text-lg">
+                    Analytics features require a database connection. 
+                    {% if error %}
+                    <br><span class="text-red-400">Error: {{ error }}</span>
+                    {% endif %}
+                </p>
+            </div>
+            <a href="/" class="inline-block bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 px-8 py-3 rounded-full text-white font-semibold transition-all duration-300">
+                <i class="fas fa-arrow-left mr-2"></i>
+                Return to Main App
+            </a>
+        </div>
+        {% else %}
+        
+        <!-- Stats Overview -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+            <div class="glass-morphism rounded-2xl p-6 text-center">
+                <div class="text-4xl font-bold text-purple-300 mb-2">{{ "{:,}".format(total_requests) }}</div>
+                <div class="text-white/80">Total Requests</div>
+                <div class="mt-2">
+                    <i class="fas fa-microphone text-purple-300"></i>
+                </div>
+            </div>
+            
+            <div class="glass-morphism rounded-2xl p-6 text-center">
+                <div class="text-4xl font-bold text-blue-300 mb-2">{{ "{:,}".format(total_characters) }}</div>
+                <div class="text-white/80">Characters Processed</div>
+                <div class="mt-2">
+                    <i class="fas fa-keyboard text-blue-300"></i>
+                </div>
+            </div>
+            
+            <div class="glass-morphism rounded-2xl p-6 text-center">
+                <div class="text-4xl font-bold text-green-300 mb-2">{{ voice_stats|length }}</div>
+                <div class="text-white/80">Active Voices</div>
+                <div class="mt-2">
+                    <i class="fas fa-users text-green-300"></i>
+                </div>
+            </div>
+            
+            <div class="glass-morphism rounded-2xl p-6 text-center">
+                <div class="text-4xl font-bold text-yellow-300 mb-2">{{ recent_stats|length }}</div>
+                <div class="text-white/80">Active Days</div>
+                <div class="mt-2">
+                    <i class="fas fa-calendar-alt text-yellow-300"></i>
+                </div>
+            </div>
+        </div>
+
+        <div class="grid lg:grid-cols-2 gap-8">
+            <!-- Voice Usage Chart -->
+            <div class="glass-morphism rounded-2xl p-6">
+                <h3 class="text-2xl font-bold mb-6 text-purple-300">
+                    <i class="fas fa-chart-bar mr-3"></i>Popular Voices
+                </h3>
+                {% if voice_stats %}
+                <div class="space-y-4">
+                    {% for voice in voice_stats %}
+                    <div class="flex items-center justify-between p-3 bg-white/5 rounded-lg">
+                        <div class="flex items-center">
+                            <div class="w-8 h-8 bg-purple-600/30 rounded-full flex items-center justify-center mr-3">
+                                {{ voice_stats.index(voice) + 1 }}
+                            </div>
+                            <div>
+                                <div class="font-semibold text-white">{{ voice.voice_name }}</div>
+                                <div class="text-white/60 text-sm">{{ "{:,}".format(voice.total_characters) }} characters</div>
+                            </div>
+                        </div>
+                        <div class="text-right">
+                            <div class="text-2xl font-bold text-purple-300">{{ voice.usage_count }}</div>
+                            <div class="text-white/60 text-xs">uses</div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+                {% else %}
+                <div class="text-center text-white/60 py-8">
+                    <i class="fas fa-chart-bar text-4xl mb-4"></i>
+                    <p>No voice usage data available yet</p>
+                </div>
+                {% endif %}
+            </div>
+
+            <!-- Daily Activity -->
+            <div class="glass-morphism rounded-2xl p-6">
+                <h3 class="text-2xl font-bold mb-6 text-blue-300">
+                    <i class="fas fa-calendar mr-3"></i>Recent Activity
+                </h3>
+                {% if recent_stats %}
+                <div class="space-y-4">
+                    {% for day in recent_stats %}
+                    <div class="flex items-center justify-between p-3 bg-white/5 rounded-lg">
+                        <div>
+                            <div class="font-semibold text-white">{{ day.date.strftime('%B %d, %Y') }}</div>
+                            <div class="text-white/60 text-sm">
+                                {{ day.web_requests }} web + {{ day.api_requests }} API
+                            </div>
+                        </div>
+                        <div class="text-right">
+                            <div class="text-2xl font-bold text-blue-300">{{ day.total_requests }}</div>
+                            <div class="text-white/60 text-xs">requests</div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+                {% else %}
+                <div class="text-center text-white/60 py-8">
+                    <i class="fas fa-calendar text-4xl mb-4"></i>
+                    <p>No daily stats available yet</p>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+
+        <!-- Popular Content -->
+        {% if popular_texts %}
+        <div class="glass-morphism rounded-2xl p-6 mt-8">
+            <h3 class="text-2xl font-bold mb-6 text-green-300">
+                <i class="fas fa-fire mr-3"></i>Trending Content
+            </h3>
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
+                {% for text in popular_texts %}
+                <div class="bg-white/5 rounded-lg p-4 border border-white/10">
+                    <div class="flex items-center justify-between mb-2">
+                        <span class="text-green-300 font-bold">{{ text.usage_count }}x</span>
+                        <span class="text-white/60 text-xs">{{ text.last_used.strftime('%m/%d') }}</span>
+                    </div>
+                    <p class="text-white/80 text-sm line-clamp-3">
+                        "{{ text.text_preview }}"
+                        {% if text.text_preview|length >= 200 %}...{% endif %}
+                    </p>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+        {% endif %}
+
+        <!-- API Usage Stats -->
+        <div class="glass-morphism rounded-2xl p-6 mt-8">
+            <h3 class="text-2xl font-bold mb-6 text-orange-300">
+                <i class="fas fa-code mr-3"></i>API vs Web Usage
+            </h3>
+            {% if recent_stats %}
+            <div class="grid md:grid-cols-2 gap-6">
+                <div class="text-center">
+                    <div class="text-4xl font-bold text-purple-300 mb-2">
+                        {{ recent_stats|sum(attribute='web_requests') }}
+                    </div>
+                    <div class="text-white/80">Web Interface</div>
+                    <div class="w-full bg-white/10 rounded-full h-2 mt-3">
+                        {% set total = recent_stats|sum(attribute='web_requests') + recent_stats|sum(attribute='api_requests') %}
+                        {% if total > 0 %}
+                        <div class="bg-purple-500 h-2 rounded-full" style="width: {{ (recent_stats|sum(attribute='web_requests') / total * 100)|round }}%"></div>
+                        {% endif %}
+                    </div>
+                </div>
+                
+                <div class="text-center">
+                    <div class="text-4xl font-bold text-blue-300 mb-2">
+                        {{ recent_stats|sum(attribute='api_requests') }}
+                    </div>
+                    <div class="text-white/80">API Calls</div>
+                    <div class="w-full bg-white/10 rounded-full h-2 mt-3">
+                        {% if total > 0 %}
+                        <div class="bg-blue-500 h-2 rounded-full" style="width: {{ (recent_stats|sum(attribute='api_requests') / total * 100)|round }}%"></div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+            {% else %}
+            <div class="text-center text-white/60 py-8">
+                <i class="fas fa-code text-4xl mb-4"></i>
+                <p>No usage data available yet</p>
+            </div>
+            {% endif %}
+        </div>
+        {% endif %}
+
+        <!-- Footer -->
+        <footer class="text-center mt-12 py-8 border-t border-white/20">
+            <p class="text-white/60">
+                Powered by Aawaaz.AI | Made by Heart
+            </p>
+        </footer>
+    </div>
+
+    <script>
+        // Auto-refresh every 30 seconds
+        setTimeout(() => {
+            window.location.reload();
+        }, 30000);
+
+        // Add smooth animations
+        document.addEventListener('DOMContentLoaded', function() {
+            const cards = document.querySelectorAll('.glass-morphism');
+            cards.forEach((card, index) => {
+                setTimeout(() => {
+                    card.style.opacity = '0';
+                    card.style.transform = 'translateY(20px)';
+                    card.style.transition = 'all 0.5s ease';
+                    setTimeout(() => {
+                        card.style.opacity = '1';
+                        card.style.transform = 'translateY(0)';
+                    }, 100);
+                }, index * 100);
+            });
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,453 @@
+/* AAWAAZ.AI - Gen-Z Themed Styles */
+
+/* Import Google Fonts */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700;800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&display=swap');
+
+/* CSS Variables for Theme */
+:root {
+    --primary-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    --secondary-gradient: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+    --accent-gradient: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+    --dark-gradient: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
+    --glass-bg: rgba(255, 255, 255, 0.1);
+    --glass-border: rgba(255, 255, 255, 0.2);
+    --text-primary: #ffffff;
+    --text-secondary: #b8c6db;
+    --text-accent: #4ecdc4;
+    --success-color: #2ecc71;
+    --error-color: #e74c3c;
+    --warning-color: #f39c12;
+    --neon-glow: 0 0 20px rgba(78, 205, 196, 0.6);
+    --box-shadow: 0 8px 32px rgba(31, 38, 135, 0.37);
+}
+
+/* Global Styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Poppins', sans-serif;
+    background: var(--primary-gradient);
+    background-attachment: fixed;
+    min-height: 100vh;
+    color: var(--text-primary);
+    overflow-x: hidden;
+}
+
+/* Animated Background */
+body::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: 
+        radial-gradient(circle at 20% 80%, rgba(120, 119, 198, 0.3) 0%, transparent 50%),
+        radial-gradient(circle at 80% 20%, rgba(255, 119, 198, 0.3) 0%, transparent 50%),
+        radial-gradient(circle at 40% 40%, rgba(120, 219, 255, 0.3) 0%, transparent 50%);
+    z-index: -1;
+    animation: backgroundShift 10s ease-in-out infinite alternate;
+}
+
+@keyframes backgroundShift {
+    0% { transform: scale(1) rotate(0deg); }
+    100% { transform: scale(1.1) rotate(5deg); }
+}
+
+/* Main Container */
+.main-container {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 20px;
+    position: relative;
+    z-index: 1;
+}
+
+/* Header Styles */
+.brand-title {
+    font-family: 'Orbitron', monospace;
+    font-size: 3.5rem;
+    font-weight: 900;
+    background: var(--accent-gradient);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    text-shadow: 0 0 30px rgba(79, 172, 254, 0.5);
+    margin-bottom: 10px;
+    animation: glow 2s ease-in-out infinite alternate;
+}
+
+@keyframes glow {
+    from { text-shadow: 0 0 20px rgba(79, 172, 254, 0.5); }
+    to { text-shadow: 0 0 40px rgba(79, 172, 254, 0.8), 0 0 60px rgba(79, 172, 254, 0.6); }
+}
+
+.brand-subtitle {
+    font-size: 1.2rem;
+    color: var(--text-secondary);
+    margin-bottom: 0;
+    font-weight: 400;
+}
+
+/* Glass Card Effect */
+.glass-card {
+    background: var(--glass-bg);
+    backdrop-filter: blur(15px);
+    -webkit-backdrop-filter: blur(15px);
+    border: 1px solid var(--glass-border);
+    border-radius: 20px;
+    padding: 30px;
+    box-shadow: var(--box-shadow);
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.glass-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+    transition: left 0.7s ease;
+}
+
+.glass-card:hover::before {
+    left: 100%;
+}
+
+.glass-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 15px 40px rgba(31, 38, 135, 0.5);
+}
+
+/* Form Styles */
+.form-label {
+    font-weight: 600;
+    color: var(--text-primary);
+    font-size: 1.1rem;
+    margin-bottom: 10px;
+    display: block;
+}
+
+.glass-input {
+    background: rgba(255, 255, 255, 0.15) !important;
+    border: 2px solid var(--glass-border) !important;
+    border-radius: 15px !important;
+    color: var(--text-primary) !important;
+    font-size: 1rem !important;
+    padding: 15px 20px !important;
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    transition: all 0.3s ease !important;
+}
+
+.glass-input:focus {
+    background: rgba(255, 255, 255, 0.2) !important;
+    border-color: var(--text-accent) !important;
+    box-shadow: 0 0 20px rgba(78, 205, 196, 0.3) !important;
+    outline: none !important;
+    transform: scale(1.02);
+}
+
+.glass-input::placeholder {
+    color: var(--text-secondary) !important;
+}
+
+/* Character Counter */
+.char-counter {
+    text-align: right;
+    margin-top: 5px;
+    font-size: 0.9rem;
+    color: var(--text-accent);
+    font-weight: 500;
+}
+
+/* Neon Button */
+.btn-neon {
+    background: var(--secondary-gradient);
+    border: none;
+    border-radius: 50px;
+    padding: 15px 40px;
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: white;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 0 20px rgba(245, 87, 108, 0.4);
+}
+
+.btn-neon:hover {
+    transform: scale(1.05);
+    box-shadow: 0 0 40px rgba(245, 87, 108, 0.7);
+    animation: pulse 1.5s infinite;
+}
+
+@keyframes pulse {
+    0% { box-shadow: 0 0 40px rgba(245, 87, 108, 0.7); }
+    50% { box-shadow: 0 0 60px rgba(245, 87, 108, 1), 0 0 80px rgba(245, 87, 108, 0.5); }
+    100% { box-shadow: 0 0 40px rgba(245, 87, 108, 0.7); }
+}
+
+/* Results Section */
+.result-section {
+    margin-top: 30px;
+    text-align: center;
+}
+
+.success-message {
+    background: linear-gradient(135deg, rgba(46, 204, 113, 0.2), rgba(46, 204, 113, 0.1));
+    border: 2px solid rgba(46, 204, 113, 0.3);
+    border-radius: 15px;
+    padding: 20px;
+    margin-bottom: 20px;
+    color: var(--success-color);
+    font-weight: 600;
+    font-size: 1.1rem;
+}
+
+.audio-controls {
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 20px;
+    padding: 25px;
+    border: 1px solid var(--glass-border);
+}
+
+.audio-player {
+    width: 100%;
+    max-width: 400px;
+    margin-bottom: 20px;
+    border-radius: 10px;
+    filter: drop-shadow(0 5px 15px rgba(0, 0, 0, 0.3));
+}
+
+.btn-download {
+    background: var(--accent-gradient);
+    color: white;
+    text-decoration: none;
+    padding: 12px 30px;
+    border-radius: 30px;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    display: inline-block;
+    box-shadow: 0 5px 15px rgba(79, 172, 254, 0.3);
+}
+
+.btn-download:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 10px 25px rgba(79, 172, 254, 0.5);
+    color: white;
+    text-decoration: none;
+}
+
+/* Error Section */
+.error-section {
+    margin-top: 30px;
+    text-align: center;
+}
+
+.error-message {
+    background: linear-gradient(135deg, rgba(231, 76, 60, 0.2), rgba(231, 76, 60, 0.1));
+    border: 2px solid rgba(231, 76, 60, 0.3);
+    border-radius: 15px;
+    padding: 20px;
+    color: var(--error-color);
+    font-weight: 600;
+    font-size: 1.1rem;
+}
+
+/* API Documentation */
+.api-title {
+    font-family: 'Orbitron', monospace;
+    font-size: 1.8rem;
+    color: var(--text-accent);
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.api-docs {
+    font-size: 0.95rem;
+    line-height: 1.6;
+}
+
+.api-description {
+    text-align: center;
+    margin-bottom: 25px;
+    color: var(--text-secondary);
+    font-size: 1.1rem;
+}
+
+.api-endpoint,
+.api-params,
+.api-example,
+.api-response {
+    margin-bottom: 20px;
+    padding: 15px;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 10px;
+    border-left: 4px solid var(--text-accent);
+}
+
+.endpoint-code,
+.example-code {
+    background: rgba(0, 0, 0, 0.3);
+    padding: 8px 12px;
+    border-radius: 8px;
+    font-family: 'Courier New', monospace;
+    color: var(--text-accent);
+    display: inline-block;
+    margin: 5px 0;
+    word-break: break-all;
+}
+
+.api-params ul {
+    list-style: none;
+    padding-left: 0;
+}
+
+.api-params li {
+    margin: 8px 0;
+    padding-left: 20px;
+    position: relative;
+}
+
+.api-params li::before {
+    content: '▶';
+    position: absolute;
+    left: 0;
+    color: var(--text-accent);
+}
+
+.api-params code {
+    background: rgba(78, 205, 196, 0.2);
+    padding: 3px 8px;
+    border-radius: 5px;
+    color: var(--text-accent);
+    font-weight: 600;
+}
+
+/* Footer */
+footer {
+    margin-top: 50px;
+    padding-top: 30px;
+    border-top: 1px solid var(--glass-border);
+}
+
+.footer-text {
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+}
+
+.footer-link {
+    color: var(--text-accent);
+    text-decoration: none;
+    transition: all 0.3s ease;
+}
+
+.footer-link:hover {
+    color: white;
+    text-shadow: 0 0 10px var(--text-accent);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .main-container {
+        padding: 15px;
+    }
+    
+    .brand-title {
+        font-size: 2.5rem;
+    }
+    
+    .brand-subtitle {
+        font-size: 1rem;
+    }
+    
+    .glass-card {
+        padding: 20px;
+    }
+    
+    .btn-neon {
+        padding: 12px 30px;
+        font-size: 1rem;
+    }
+    
+    .endpoint-code,
+    .example-code {
+        font-size: 0.8rem;
+        padding: 6px 10px;
+    }
+}
+
+@media (max-width: 480px) {
+    .brand-title {
+        font-size: 2rem;
+    }
+    
+    .glass-card {
+        padding: 15px;
+    }
+    
+    .form-label {
+        font-size: 1rem;
+    }
+    
+    .glass-input {
+        padding: 12px 15px !important;
+    }
+    
+    .btn-neon {
+        padding: 10px 25px;
+        font-size: 0.9rem;
+    }
+}
+
+/* Accessibility */
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+}
+
+/* Dark mode support */
+@media (prefers-color-scheme: dark) {
+    :root {
+        --glass-bg: rgba(255, 255, 255, 0.08);
+        --glass-border: rgba(255, 255, 255, 0.15);
+        --text-secondary: #a0a0a0;
+    }
+}
+
+/* Focus styles for accessibility */
+.glass-input:focus,
+.btn-neon:focus,
+.btn-download:focus {
+    outline: 2px solid var(--text-accent);
+    outline-offset: 2px;
+}
+
+/* Loading animation */
+.loading {
+    display: inline-block;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}

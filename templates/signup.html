@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🚀 Sign Up - Aawaaz.AI</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <style>
+        .glass-morphism {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        .bg-animated {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
+            background-size: 400% 400%;
+            animation: gradient 8s ease infinite;
+        }
+        @keyframes gradient {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+        .animate-float {
+            animation: float 6s ease-in-out infinite;
+        }
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-20px); }
+        }
+    </style>
+</head>
+<body class="min-h-screen bg-animated text-white">
+    <div class="container mx-auto px-4 py-8 max-w-lg">
+        <!-- Header -->
+        <div class="text-center mb-8 animate-float">
+            <div class="w-20 h-20 bg-gradient-to-r from-purple-600 to-blue-600 rounded-full flex items-center justify-center mx-auto mb-4">
+                <i class="fas fa-user-plus text-3xl text-white"></i>
+            </div>
+            <h1 class="text-4xl font-bold mb-2">
+                <span class="bg-gradient-to-r from-purple-400 to-blue-400 bg-clip-text text-transparent">
+                    Join Aawaaz.AI
+                </span>
+            </h1>
+            <p class="text-white/70">Create your account to track your TTS history</p>
+        </div>
+
+        <!-- Signup Form -->
+        <div class="glass-morphism rounded-3xl p-8 shadow-2xl">
+            <!-- Flash Messages -->
+            {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}
+                    {% for category, message in messages %}
+                        <div class="mb-6 p-4 rounded-xl {% if category == 'error' %}bg-red-500/20 border border-red-400/30 text-red-300{% else %}bg-green-500/20 border border-green-400/30 text-green-300{% endif %}">
+                            <div class="flex items-center">
+                                <i class="fas {% if category == 'error' %}fa-exclamation-triangle{% else %}fa-check-circle{% endif %} mr-3"></i>
+                                <span>{{ message }}</span>
+                            </div>
+                        </div>
+                    {% endfor %}
+                {% endif %}
+            {% endwith %}
+
+            <form method="POST" class="space-y-6">
+                <!-- Username -->
+                <div>
+                    <label for="username" class="block text-white/80 font-semibold mb-3">
+                        <i class="fas fa-user mr-2"></i>Username *
+                    </label>
+                    <input 
+                        type="text" 
+                        id="username" 
+                        name="username" 
+                        required
+                        minlength="3"
+                        class="w-full p-4 bg-white/10 backdrop-blur-md border border-white/20 rounded-xl text-white placeholder-white/50 focus:outline-none focus:ring-2 focus:ring-purple-400 focus:border-transparent transition-all duration-300"
+                        placeholder="Choose a unique username"
+                        value="{{ request.form.get('username', '') }}"
+                    >
+                </div>
+
+                <!-- Email -->
+                <div>
+                    <label for="email" class="block text-white/80 font-semibold mb-3">
+                        <i class="fas fa-envelope mr-2"></i>Email Address *
+                    </label>
+                    <input 
+                        type="email" 
+                        id="email" 
+                        name="email" 
+                        required
+                        class="w-full p-4 bg-white/10 backdrop-blur-md border border-white/20 rounded-xl text-white placeholder-white/50 focus:outline-none focus:ring-2 focus:ring-purple-400 focus:border-transparent transition-all duration-300"
+                        placeholder="your@email.com"
+                        value="{{ request.form.get('email', '') }}"
+                    >
+                </div>
+
+                <!-- Name Fields -->
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label for="first_name" class="block text-white/80 font-semibold mb-3">
+                            <i class="fas fa-id-card mr-2"></i>First Name
+                        </label>
+                        <input 
+                            type="text" 
+                            id="first_name" 
+                            name="first_name" 
+                            class="w-full p-4 bg-white/10 backdrop-blur-md border border-white/20 rounded-xl text-white placeholder-white/50 focus:outline-none focus:ring-2 focus:ring-purple-400 focus:border-transparent transition-all duration-300"
+                            placeholder="First name"
+                            value="{{ request.form.get('first_name', '') }}"
+                        >
+                    </div>
+                    <div>
+                        <label for="last_name" class="block text-white/80 font-semibold mb-3">
+                            <i class="fas fa-id-card mr-2"></i>Last Name
+                        </label>
+                        <input 
+                            type="text" 
+                            id="last_name" 
+                            name="last_name" 
+                            class="w-full p-4 bg-white/10 backdrop-blur-md border border-white/20 rounded-xl text-white placeholder-white/50 focus:outline-none focus:ring-2 focus:ring-purple-400 focus:border-transparent transition-all duration-300"
+                            placeholder="Last name"
+                            value="{{ request.form.get('last_name', '') }}"
+                        >
+                    </div>
+                </div>
+
+                <!-- Password -->
+                <div>
+                    <label for="password" class="block text-white/80 font-semibold mb-3">
+                        <i class="fas fa-lock mr-2"></i>Password *
+                    </label>
+                    <input 
+                        type="password" 
+                        id="password" 
+                        name="password" 
+                        required
+                        minlength="6"
+                        class="w-full p-4 bg-white/10 backdrop-blur-md border border-white/20 rounded-xl text-white placeholder-white/50 focus:outline-none focus:ring-2 focus:ring-purple-400 focus:border-transparent transition-all duration-300"
+                        placeholder="At least 6 characters"
+                    >
+                </div>
+
+                <!-- Confirm Password -->
+                <div>
+                    <label for="confirm_password" class="block text-white/80 font-semibold mb-3">
+                        <i class="fas fa-lock mr-2"></i>Confirm Password *
+                    </label>
+                    <input 
+                        type="password" 
+                        id="confirm_password" 
+                        name="confirm_password" 
+                        required
+                        minlength="6"
+                        class="w-full p-4 bg-white/10 backdrop-blur-md border border-white/20 rounded-xl text-white placeholder-white/50 focus:outline-none focus:ring-2 focus:ring-purple-400 focus:border-transparent transition-all duration-300"
+                        placeholder="Repeat your password"
+                    >
+                </div>
+
+                <button 
+                    type="submit" 
+                    class="w-full bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 p-4 rounded-xl text-white font-bold transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-2xl"
+                >
+                    <i class="fas fa-user-plus mr-2"></i>
+                    Create Account
+                </button>
+            </form>
+
+            <!-- Login Link -->
+            <div class="mt-8 pt-6 border-t border-white/20 text-center">
+                <p class="text-white/60 mb-4">Already have an account?</p>
+                <a href="/login" class="inline-block text-purple-300 hover:text-white transition-colors duration-300 font-semibold">
+                    <i class="fas fa-sign-in-alt mr-2"></i>
+                    Sign In Instead
+                </a>
+            </div>
+        </div>
+
+        <!-- Back to App -->
+        <div class="mt-6 text-center">
+            <a href="/" class="text-white/50 hover:text-white transition-colors duration-300">
+                <i class="fas fa-home mr-2"></i>
+                Back to Aawaaz.AI
+            </a>
+        </div>
+
+        <!-- Footer -->
+        <footer class="text-center mt-8 py-6">
+            <p class="text-white/40 text-xs">
+                Powered by Aawaaz.AI | Made by Heart
+            </p>
+        </footer>
+    </div>
+
+    <script>
+        // Password confirmation validation
+        const password = document.getElementById('password');
+        const confirmPassword = document.getElementById('confirm_password');
+        
+        function validatePasswords() {
+            if (password.value !== confirmPassword.value) {
+                confirmPassword.setCustomValidity('Passwords do not match');
+            } else {
+                confirmPassword.setCustomValidity('');
+            }
+        }
+        
+        password.addEventListener('input', validatePasswords);
+        confirmPassword.addEventListener('input', validatePasswords);
+
+        // Form validation feedback
+        document.querySelector('form').addEventListener('submit', function(e) {
+            const requiredFields = ['username', 'email', 'password', 'confirm_password'];
+            let isValid = true;
+            
+            requiredFields.forEach(field => {
+                const element = document.getElementById(field);
+                if (!element.value.trim()) {
+                    isValid = false;
+                    element.focus();
+                    return false;
+                }
+            });
+            
+            if (!isValid) {
+                e.preventDefault();
+                return false;
+            }
+            
+            // Show loading state
+            const button = this.querySelector('button[type="submit"]');
+            button.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i>Creating Account...';
+            button.disabled = true;
+        });
+    </script>
+</body>
+</html>
